@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.GozemBcase" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#179138</item>
+        <item name="colorPrimaryDark">#454545</item>
+        <item name="colorAccent">#FFFFFF</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.GozemBcase.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.GozemBcase.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.GozemBcase.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

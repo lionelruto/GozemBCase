@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "216378994335",
+    "project_id": "gozembcase",
+    "storage_bucket": "gozembcase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:216378994335:android:85a8298abd4c38b927bcaa",
+        "android_client_info": {
+          "package_name": "com.example.gozembcase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "216378994335-rgtaggohtahe46pbg55u6jvtvntkm3b8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gozembcase",
+            "certificate_hash": "dd03a41f4191cc5b792e716b435a155d80013c83"
+          }
+        },
+        {
+          "client_id": "216378994335-qcdo7cnjnr7qq69ibos5mnvvh78r8srb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALa4XhDMRVhQzA2fthKdwIq9A3VcyZZTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "216378994335-qcdo7cnjnr7qq69ibos5mnvvh78r8srb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
