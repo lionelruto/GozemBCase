@@ -39,6 +39,13 @@ import com.google.gson.Gson
 import org.json.JSONObject
 import java.io.IOException
 import java.util.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+
+
+
 
 
 class MapsFragment : Fragment() {
@@ -46,7 +53,8 @@ class MapsFragment : Fragment() {
     var locationManager: LocationManager? = null
     var mFusedLocationClient: FusedLocationProviderClient? = null
     var currentLocation = LatLng(20.5, 78.9)
-
+    val drawble = requireActivity()!!.resources.getDrawable(R.drawable.icons8_car_30__1_,requireActivity().theme)
+    val bitmapImage= drawableToBitmap(drawble)
 
     private val callback =
         OnMapReadyCallback { googleMap ->
@@ -84,13 +92,12 @@ class MapsFragment : Fragment() {
             var lng= 78.9
 
             val sharedPreference =  requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
-            val myuid= sharedPreference.getString("uid", null)
-
+            val myuid= sharedPreference?.getString("uid", null)
             if (myuid != null) {
                 Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_SHORT).show()
 
 
-            /*    val auth = FirebaseAuth.getInstance()
+                val auth = FirebaseAuth.getInstance()
                 val db = FirebaseFirestore.getInstance()
                 val userRepos= UserRepo(auth, db)
                 val userFactory= UserFactory(userRepos)
@@ -108,7 +115,7 @@ class MapsFragment : Fragment() {
 
 
                 }
-                */
+
 
             }
 
@@ -120,9 +127,8 @@ class MapsFragment : Fragment() {
 
             gMap = googleMap
             val sydney = LatLng(lat, lng)
-            val bitmapImage= BitmapFactory.decodeResource(resources, R.drawable.ic_baseline_person_24)
-            gMap!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney")/*.icon(
-                BitmapDescriptorFactory.fromBitmap(bitmapImage))*/)
+
+            gMap!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").icon(BitmapDescriptorFactory.fromBitmap(bitmapImage!!)))
             gMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
             // Enable the zoom controls for the map
@@ -152,9 +158,9 @@ class MapsFragment : Fragment() {
             // Initializing fused location client
 
 
-           /* mFusedLocationClient =
+            mFusedLocationClient =
                 LocationServices.getFusedLocationProviderClient(requireActivity())
-            lastLocation*/
+            lastLocation
         }
 
     override fun onCreateView(
@@ -183,12 +189,13 @@ class MapsFragment : Fragment() {
                     if (location == null) {
                         requestNewLocationData()
                     } else {
+                        //val bitmapImage= BitmapFactory.decodeResource(resources, R.drawable.icons8_car_30__1_)
                         currentLocation = LatLng(
                             location.latitude,
                             location.longitude
                         )
                         gMap!!.clear()
-                        gMap!!.addMarker(MarkerOptions().position(currentLocation))
+                        gMap!!.addMarker(MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromBitmap(bitmapImage!!)))
                         gMap!!.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(
                                 currentLocation,
@@ -269,4 +276,16 @@ class MapsFragment : Fragment() {
                 LocationManager.NETWORK_PROVIDER
             )
         }
+
+    fun drawableToBitmap(drawable: Drawable): Bitmap? {
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+        val bitmap =
+            Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight())
+        drawable.draw(canvas)
+        return bitmap
+    }
 }

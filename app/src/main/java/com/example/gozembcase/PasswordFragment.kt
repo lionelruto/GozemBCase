@@ -73,10 +73,7 @@ class PasswordFragment : Fragment(){
                 //recupération du bundle passé par le fragment email à travers la mainactivity a l'aide de l'interface Communicator
                 val bundle = this.arguments
                 if (bundle != null) {
-                    val intent= Intent(requireActivity(), Details::class.java).apply{}
-                    startActivity(intent)
-
-                    /*val mail= bundle.getString("email")
+                    val mail= bundle.getString("email")
 
                     val auth = FirebaseAuth.getInstance()
                     val db = FirebaseFirestore.getInstance()
@@ -98,10 +95,12 @@ class PasswordFragment : Fragment(){
                                 val str = Gson().toJson(state).toString()
                                 val result= JSONObject(str).getString("result")
                                 val intent= Intent(requireActivity(), Details::class.java).apply{}
-                                val sharedPreference =  requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
+                                val sharedPreference = requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
+                                sharedPreference?.edit()?.remove("uid")?.apply() //remove sharepreference if exist
+                                sharedPreference?.edit()?.clear()?.apply() //remove sharepreference if exist
                                 var editor = sharedPreference.edit()
-                                editor.putString("uid",result)
-                                editor.commit()
+                                editor?.putString("uid",result)
+                                editor?.commit()
                                 intent.putExtra("uid", result)
                                 startActivity(intent)
                             }
@@ -117,7 +116,7 @@ class PasswordFragment : Fragment(){
 
                     }
 
-                     */
+
                 }
 
 

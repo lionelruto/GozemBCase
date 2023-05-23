@@ -1,5 +1,6 @@
 package com.example.gozembcase
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -88,7 +89,7 @@ class Register : AppCompatActivity() {
                         val str = Gson().toJson(state).toString()
                         val result= JSONObject(str).getString("result")
                         Toast.makeText(this, result, Toast.LENGTH_LONG).show()
-                        val intent= Intent(this, Details::class.java).apply{}
+                        val intent= Intent(this, MainActivity::class.java).apply{}
                         intent.putExtra("uid", result)
                         startActivity(intent)
                     }

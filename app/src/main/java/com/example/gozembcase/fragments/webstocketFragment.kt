@@ -2,22 +2,21 @@ package com.example.gozembcase.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.ListView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.gozembcase.Model.User
 import com.example.gozembcase.R
 import com.example.gozembcase.Viewmodel.UserFactory
 import com.example.gozembcase.Viewmodel.UserViewModel
-import com.example.gozembcase.databinding.FragmentPasswordBinding
 import com.example.gozembcase.databinding.FragmentWebstocketBinding
 import com.example.gozembcase.repository.UserRepo
 import com.example.gozembcase.webstocket.WebSocketClient
@@ -25,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import org.json.JSONObject
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,26 +41,24 @@ class webstocketFragment : Fragment() {
     private val socketKey = "5u4GX60EvqAn8gcClTVZ95GHiaRCCNpfnSjLiNdN"
     //private val roomId=
     private lateinit var webstocketFragmentBinding: FragmentWebstocketBinding
+    private var isMessage= false
 
-
+    val text: ArrayList<String> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         webstocketFragmentBinding= FragmentWebstocketBinding.inflate(layoutInflater)
+        val webSocketClient = WebSocketClient.getInstance()
 
-        val text: ArrayList<String> = ArrayList()
 
         // Inflate the layout for this fragment
 
-
         val sharedPreference =  requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
-        val myuid= sharedPreference.getString("uid", null)
+        val myuid= sharedPreference?.getString("uid", null)
         if (myuid != null) {
 
-        }
             val auth = FirebaseAuth.getInstance()
             val db = FirebaseFirestore.getInstance()
             val userRepos= UserRepo(auth, db)
@@ -74,69 +72,47 @@ class webstocketFragment : Fragment() {
                 val result= JSONObject(str).getJSONObject("result")
                 var title=  result.getJSONObject("content").getString("title")
                 var source = result.getJSONObject("content").getString("source")
-               var value = result.getJSONObject("content").getString("value")
-
-                val socketListener = object : WebSocketClient.SocketListener {
-                    override fun onMessage(message: String) {
-                        Log.e("socketCheck onMessage", message)
-                        Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
-                        // use arrayadapter and define an array
-                        val arrayAdapter: ArrayAdapter<*>
-                        val text: ArrayList<String> = ArrayList()
-                        text.add(message)
-
-                        // access the listView from xml file
-                        var mListView = webstocketFragmentBinding.listView
-                        arrayAdapter = ArrayAdapter(requireActivity(),
-                            android.R.layout.simple_list_item_1, text)
-                        mListView.adapter = arrayAdapter
-                    }
-
-                }
-
-                val v= webstocketFragmentBinding.root
-                val button= v.findViewById<Button>(R.id.sendwebstocket)
-                button.setOnClickListener{
-                    webstocketFragmentBinding.textedit.text= Editable.Factory.getInstance().newEditable("")
-                    Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_SHORT).show()
-
-                    //webSocketClient = WebSocketClient.getInstance()
-                    //webSocketClient.setSocketUrl(source)
-                    //webSocketClient.connect()
-                    //webSocketClient.setListener(socketListener)
-                    //webSocketClient.sendMessage("hello webstocket")
-                    //webSocketClient.disconnect()
-                }
-
-
+                var value = result.getJSONObject("content").getString("value")
+                webSocketClient.setSocketUrl(source)
+                webSocketClient.connect()
 
             }
 
+        }
+
         val v= webstocketFragmentBinding.root
         val button= v.findViewById<Button>(R.id.sendwebstocket)
-        // access the listView from xml file
-        var mListView = webstocketFragmentBinding.listView
-        val arrayAdapter: ArrayAdapter<*>
-        arrayAdapter = ArrayAdapter(requireActivity(),
-            android.R.layout.simple_list_item_1, text)
         button.setOnClickListener{
 
+            val message= webstocketFragmentBinding.textedit.text.toString()
             webstocketFragmentBinding.textedit.text= Editable.Factory.getInstance().newEditable("")
             Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_SHORT).show()
-
-            text.add("message")
-            arrayAdapter.notifyDataSetChanged()
-            //webSocketClient = WebSocketClient.getInstance()
+            //text.add("message")
+            // webSocketClient = WebSocketClient.getInstance()
             //webSocketClient.setSocketUrl(source)
             //webSocketClient.connect()
-            //webSocketClient.setListener(socketListener)
-            //webSocketClient.sendMessage("hello webstocket")
+            webSocketClient.sendMessage(message)
+
+            webSocketClient.setListener(socketListener)
+
             //webSocketClient.disconnect()
+
+
+                isMessage= false
+
         }
-        mListView.adapter = arrayAdapter
+        //mListView.adapter = arrayAdapter
 
         return webstocketFragmentBinding.root
-    }
 
+    }
+    val socketListener = object : WebSocketClient.SocketListener {
+        override fun onMessage(message: String) {
+            var mListView = webstocketFragmentBinding.listView
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
+
+        }
+
+    }
 
 }

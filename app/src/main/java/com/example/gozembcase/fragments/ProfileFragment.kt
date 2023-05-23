@@ -2,6 +2,7 @@ package com.example.gozembcase.fragments
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
@@ -57,13 +58,13 @@ class ProfileFragment : Fragment() {
     ): View? {
         fragmentprofilebiding= FragmentProfileBinding.inflate(layoutInflater)
         val sharedPreference =  requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
-        val myuid= sharedPreference.getString("uid", null)
+        val myuid= sharedPreference?.getString("uid", null)
         //recupération du bundle passé par le fragment email à travers la mainactivity a l'aide de l'interface Communicator
         val bundle = this.arguments
         if (myuid != null) {
             Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_SHORT).show()
 
-            /*
+
             Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_SHORT).show()
             val uid= Firebase.auth.currentUser?.uid
             val auth = FirebaseAuth.getInstance()
@@ -90,7 +91,7 @@ class ProfileFragment : Fragment() {
 
             }
 
-             */
+
 
         }
 
@@ -99,7 +100,9 @@ class ProfileFragment : Fragment() {
 
         fragmentprofilebiding.filledButton.setOnClickListener {
                 //boutton pour la deconnextion
-
+            val sharedPreference = requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
+            sharedPreference?.edit()?.remove("uid")?.apply() //remove sharepreference if exist
+            sharedPreference?.edit()?.clear()?.apply()
             val auth = FirebaseAuth.getInstance()
             val db = FirebaseFirestore.getInstance()
             val userRepos= UserRepo(auth, db)
@@ -122,3 +125,5 @@ class ProfileFragment : Fragment() {
 
 
 }
+
+

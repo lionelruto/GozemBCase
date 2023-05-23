@@ -11,7 +11,7 @@ import com.example.gozembcase.fragments.ProfileFragment
 import com.example.gozembcase.fragments.webstocketFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class Details : AppCompatActivity(), SendFragmentMessages {
+class Details : AppCompatActivity() {
 
     private lateinit var activityDetailsBinding: ActivityDetailsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,16 +28,6 @@ class Details : AppCompatActivity(), SendFragmentMessages {
         viewpager.orientation= ViewPager2.ORIENTATION_HORIZONTAL
         viewpager.adapter= adapter
         val uid=   intent.extras?.getString("uid") ?: "Aucun utilisateur trouvé"
-
-        val bundle = Bundle()
-        bundle.putString("uid", uid)
-        val fragment0 = ProfileFragment()
-        val fragment1 = MapsFragment()
-        val fragment2 = webstocketFragment()
-
-        fragment0.arguments= bundle
-        fragment1.arguments= bundle
-        fragment2.arguments= bundle
 
         val navigationBarView= activityDetailsBinding.bottomNavigation as BottomNavigationView
 
@@ -63,7 +53,7 @@ class Details : AppCompatActivity(), SendFragmentMessages {
             }
         }
 
-        fun getItems (i: Int)= viewpager.currentItem+i
+
 
 
         viewpager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -81,10 +71,6 @@ class Details : AppCompatActivity(), SendFragmentMessages {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
             }
         })
-    }
-
-    override fun sendData(uid: String?) {
-        TODO("Not yet implemented")
     }
 
 
