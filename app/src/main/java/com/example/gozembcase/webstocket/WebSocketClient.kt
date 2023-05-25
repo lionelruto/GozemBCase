@@ -98,24 +98,26 @@ class WebSocketClient {
         //called when text message received
         override fun onMessage(webSocket: okhttp3.WebSocket, text: String) {
             socketListener?.onMessage(text)
+            Log.e("messageSend", "le message est $text")
         }
 
         //called when binary message received
         override fun onClosing(webSocket: okhttp3.WebSocket, code: Int, reason: String) {
             Log.e("socketCheck", "onClosing()")
+
         }
 
         override fun onClosed(webSocket: okhttp3.WebSocket, code: Int, reason: String) {
             //called when no more messages and the connection should be released
             Log.e("socketCheck", "onClosed()")
-            if (shouldReconnect) reconnect()
+            //if (shouldReconnect) reconnect()
         }
 
         override fun onFailure(
             webSocket: okhttp3.WebSocket, t: Throwable, response: Response?
         ) {
             Log.e("socketCheck", "onFailure()")
-            if (shouldReconnect) reconnect()
+            //if (shouldReconnect) reconnect()
         }
     }
 }

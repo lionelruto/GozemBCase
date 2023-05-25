@@ -41,7 +41,7 @@ class UserViewModel @Inject constructor(private val userRepository: UserReposito
         get() = _getWebsocket
     fun getWebsocket(uid: String){
         //_getUser.value
-        userRepository.getWebstocket(uid){_getUser.value = it}
+        userRepository.getWebstocket(uid){_getWebsocket.value = it}
     }
 
     private val _getInser = MutableLiveData<Ressource<String>>()

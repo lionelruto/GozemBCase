@@ -2,8 +2,6 @@ package com.example.gozembcase.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,7 +42,7 @@ class webstocketFragment : Fragment() {
     private var isMessage= false
 
     val text: ArrayList<String> = ArrayList()
-
+    var msg =""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,6 +55,7 @@ class webstocketFragment : Fragment() {
 
         val sharedPreference =  requireActivity().getSharedPreferences("save_uid", Context.MODE_PRIVATE)
         val myuid= sharedPreference?.getString("uid", null)
+        Toast.makeText(requireActivity(), "Vous êtes connecté par défaut", Toast.LENGTH_SHORT).show()
         if (myuid != null) {
 
             val auth = FirebaseAuth.getInstance()
@@ -69,46 +68,75 @@ class webstocketFragment : Fragment() {
             userViewModel.getWebsocket.observe(viewLifecycleOwner) { state ->
 
                 val str = Gson().toJson(state).toString()
+                Log.e("checkState", JSONObject(str).getJSONObject("result").toString())
                 val result= JSONObject(str).getJSONObject("result")
                 var title=  result.getJSONObject("content").getString("title")
                 var source = result.getJSONObject("content").getString("source")
                 var value = result.getJSONObject("content").getString("value")
                 webSocketClient.setSocketUrl(source)
                 webSocketClient.connect()
+                webSocketClient.setListener(socketListener)
 
             }
 
         }
+        val mListView = webstocketFragmentBinding.listView
+        val arrayAdapter: ArrayAdapter<*>
+        val textList:ArrayList<String> = ArrayList()
+        arrayAdapter= ArrayAdapter(requireActivity(), android.R.layout.simple_list_item_1,textList )
 
         val v= webstocketFragmentBinding.root
+        val butdisconnect= v.findViewById<Button>(R.id.webdisconnect)
+        butdisconnect.setOnClickListener{
+            webSocketClient.disconnect()
+            Toast.makeText(requireActivity(), "Vous êtes bien deconnecté", Toast.LENGTH_LONG).show()
+
+        }
+
+        val reconnect= v.findViewById<Button>(R.id.webreconnect)
+        reconnect.setOnClickListener{
+            webSocketClient.connect()
+            webSocketClient.setListener(socketListener)
+            Toast.makeText(requireActivity(), "Vous êtes bien reconnecté", Toast.LENGTH_SHORT).show()
+
+        }
+
         val button= v.findViewById<Button>(R.id.sendwebstocket)
         button.setOnClickListener{
 
             val message= webstocketFragmentBinding.textedit.text.toString()
             webstocketFragmentBinding.textedit.text= Editable.Factory.getInstance().newEditable("")
-            Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Goood", Toast.LENGTH_LONG).show()
             //text.add("message")
             // webSocketClient = WebSocketClient.getInstance()
             //webSocketClient.setSocketUrl(source)
-            //webSocketClient.connect()
+
             webSocketClient.sendMessage(message)
 
-            webSocketClient.setListener(socketListener)
+
+
+            if (msg.isEmpty()){
+                Toast.makeText(requireActivity(), "Probleme avec le websocket/ déconnecté", Toast.LENGTH_LONG).show()
+
+            }else{
+
+                arrayAdapter.add(message)
+                arrayAdapter.notifyDataSetChanged()
+            }
+
 
             //webSocketClient.disconnect()
 
-
-                isMessage= false
-
         }
-        //mListView.adapter = arrayAdapter
+        mListView.adapter = arrayAdapter
 
         return webstocketFragmentBinding.root
 
     }
     val socketListener = object : WebSocketClient.SocketListener {
         override fun onMessage(message: String) {
-            var mListView = webstocketFragmentBinding.listView
+            msg= message
+           // mListView.adapter= arrayAdapter
             Toast.makeText(requireActivity(), message, Toast.LENGTH_LONG).show()
 
         }

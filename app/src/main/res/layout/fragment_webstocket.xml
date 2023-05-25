@@ -7,16 +7,47 @@
         android:layout_height="match_parent"
         tools:context=".fragments.webstocketFragment">
 
+    <LinearLayout
+        android:id="@+id/lisdisconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingEnd="20dp"
+        android:gravity="end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/webdisconnect"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:text="deconnexion" />
+            <Button
+                android:id="@+id/webreconnect"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:text="Reconnexion" />
+        </LinearLayout>
+
+    </LinearLayout>
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lisdisconnect"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/laymessage"
             />
+
 
     <LinearLayout
         android:id="@+id/laymessage"
@@ -32,7 +63,7 @@
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:hint="Entrez le mail"
+            android:hint="Entrez message"
             android:focusable="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -47,9 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
-            android:text="send"
-
-            />
+            android:text="send" />
 
     </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

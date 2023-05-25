@@ -53,8 +53,8 @@ class MapsFragment : Fragment() {
     var locationManager: LocationManager? = null
     var mFusedLocationClient: FusedLocationProviderClient? = null
     var currentLocation = LatLng(20.5, 78.9)
-    val drawble = requireActivity()!!.resources.getDrawable(R.drawable.icons8_car_30__1_,requireActivity().theme)
-    val bitmapImage= drawableToBitmap(drawble)
+
+
 
     private val callback =
         OnMapReadyCallback { googleMap ->
@@ -127,7 +127,8 @@ class MapsFragment : Fragment() {
 
             gMap = googleMap
             val sydney = LatLng(lat, lng)
-
+            val drawble = context?.resources?.getDrawable(R.drawable.icons8_car_30__1_,requireActivity().theme)
+            val bitmapImage= drawableToBitmap(drawble!!)
             gMap!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney").icon(BitmapDescriptorFactory.fromBitmap(bitmapImage!!)))
             gMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
@@ -195,6 +196,8 @@ class MapsFragment : Fragment() {
                             location.longitude
                         )
                         gMap!!.clear()
+                        val drawble = context?.resources?.getDrawable(R.drawable.icons8_car_30__1_,requireActivity().theme)
+                        val bitmapImage= drawableToBitmap(drawble!!)
                         gMap!!.addMarker(MarkerOptions().position(currentLocation).icon(BitmapDescriptorFactory.fromBitmap(bitmapImage!!)))
                         gMap!!.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(
